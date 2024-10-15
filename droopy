@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Droopy (http://stackp.online.fr/droopy)
@@ -6,6 +6,7 @@ Copyright 2008-2013 (c) Pierre Duquesne <stackp@online.fr>
 Licensed under the New BSD License.
 
 Changelog
+   20241015 * Print hostname (@kil9)
    20151025 * Global variables removed
             * Code refactoring and re-layout
             * Python 2 and 3 compatibility
@@ -1094,8 +1095,11 @@ def main():
         print("Options saved in {0}".format(cfg))
     print("Files will be uploaded to {0}\n".format(args['directory']))
     proto = 'https' if args['ssl'] else 'http'
+    hostname = socket.gethostname()
+    port = args['port']
+    url = f"{proto}://{hostname}:{port}"
     print("HTTP server starting...",
-          "Check it out at {0}://localhost:{1}".format(proto, args['port']))
+          "Check it out at {0}".format(url))
     try:
         run(port=args['port'],
             certfile=args['ssl'],
@@ -1109,6 +1113,7 @@ def main():
             localisations=default_localisations)
     except KeyboardInterrupt:
         print('^C received, awaiting termination of remaining server threads..')
+
 
 if __name__ == '__main__':
     main()
